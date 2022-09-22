@@ -32,7 +32,7 @@ CREATE TABLE `swapi`.`people_raw` (
 
 
 create view swapi.oldes_charc_by_film as
-select name, films, birth_year, BirthYearRank
+select name, films, birth_year
 from (
   select name, films, birth_year,
   DENSE_RANK() OVER(PARTITION BY films ORDER BY birth_year ASC) AS BirthYearRank
@@ -41,4 +41,5 @@ from (
   where birth_year > 0 and films <> '' # and films = 'https://swapi.dev/api/films/2/'
   order by films
 ) a
-where BirthYearRank = 1;
+where BirthYearRank = 1
+group by name, films, birth_year;
