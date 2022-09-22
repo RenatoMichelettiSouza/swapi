@@ -2,6 +2,7 @@ import requests
 import json
 import datetime as dt
 import logging
+import mysql.connector
 
 import utils.swapi_functions as swapi
 
@@ -12,14 +13,21 @@ def insert_report_table(origin_table='swapi.people_raw', destination_table='swap
     '''
     Feeding Report table `people_report`
     '''
-    
+
     start_dt = dt.datetime.now()
     print('Feeding Report table -----> ' + destination_table)
     print('Start datetime: ' + str(start_dt))
     print(100*'-')
     print()
-    mydb = swapi.db_connection()
+    #mydb = swapi.db_connection()
     print()
+
+    mydb = mysql.connector.connect(
+        host="localhost",
+        user="dev",
+        password="P4ssw0rd!",
+        database="swapi"
+    )
     mycursor = mydb.cursor()
     
     sql = f'select name, birth_year, films, max(ingested_datetime) as raw_ingested_datetime from {origin_table} group by name, birth_year, films'
@@ -66,6 +74,8 @@ def insert_report_table(origin_table='swapi.people_raw', destination_table='swap
     print()
     
     mydb.commit()
+    mydb.close()
+
     end_dt = dt.datetime.now()
     diff_dt = end_dt - start_dt
     print('PROCESS EXECUTED IN: ' + str(diff_dt.total_seconds()) + ' secs.')
