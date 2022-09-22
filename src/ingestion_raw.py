@@ -5,6 +5,7 @@ import requests
 import json
 import datetime as dt
 import logging
+import mysql.connector
 
 import report_table as rt
 
@@ -54,6 +55,12 @@ def raw_ingestion(api_url, destination_table):
     Example: api_url -> https://swapi.dev/api/people/?format=json
              destination_table -> swapi.people_raw
     '''
+    mydb = mysql.connector.connect(
+        host="localhost",
+        user="dev",
+        password="P4ssw0rd!",
+        database="swapi"
+    )
 
     start_dt = dt.datetime.now()
     print('Ingesting data from API to Raw table -----> ' + destination_table)
@@ -73,8 +80,6 @@ def raw_ingestion(api_url, destination_table):
     next_page = api_return['next']
     
     inserted_rows = 0
-    mydb = swapi.db_connection()
-    mycursor = mydb.cursor()
 
     # PAGINATION LENGTH
     count = swapi.page_length(api_return['count'])
@@ -115,13 +120,15 @@ def raw_ingestion(api_url, destination_table):
             break
             
     mydb.commit()
+    mydb.close()
+    
     end_dt = dt.datetime.now()
     diff_dt = end_dt - start_dt
     print('PROCESS EXECUTED IN: ' + str(diff_dt.total_seconds()) + ' secs.')
     print()
     print(100*'-')
     print()
-    
+
     return True
 
 
@@ -129,9 +136,10 @@ def raw_ingestion(api_url, destination_table):
 if __name__ == "__main__":
 
     try:
-    
+        
         if raw_ingestion('https://swapi.dev/api/people/?format=json','swapi.people_raw'):
             rt.insert_report_table()
+
 
    
     except Exception as e:

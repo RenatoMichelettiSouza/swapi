@@ -1,25 +1,19 @@
 import requests
 import json
 import datetime as dt
+import mysql.connector
 
 
 
-def db_connection():
-
-    '''
-    MySql Database connection string
-    '''
-
-    import mysql.connector
-
-    mydb = mysql.connector.connect(
-      host="localhost",
-      user="dev",
-      password="P4ssw0rd!",
-      database="swapi"
-    )
-    
-    return mydb
+'''
+MySql Database connection string
+'''
+mydb = mysql.connector.connect(
+    host="localhost",
+    user="dev",
+    password="P4ssw0rd!",
+    database="swapi"
+)
 
 
 def page_length(count):
@@ -62,8 +56,6 @@ def requests_get(api):
         return false
 
 def db_write(sql):
-    
-    mydb = db_connection()
     
     mycursor = mydb.cursor()
     mycursor.execute(sql)
