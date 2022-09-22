@@ -21,13 +21,8 @@ def insert_report_table(origin_table='swapi.people_raw', destination_table='swap
     print()
     #mydb = swapi.db_connection()
     print()
-
-    mydb = mysql.connector.connect(
-        host="localhost",
-        user="dev",
-        password="P4ssw0rd",
-        database="swapi"
-    )
+    
+    mydb = swapi.db_connec()
     mycursor = mydb.cursor()
     
     sql = f'select name, birth_year, films, max(ingested_datetime) as raw_ingested_datetime from {origin_table} group by name, birth_year, films'

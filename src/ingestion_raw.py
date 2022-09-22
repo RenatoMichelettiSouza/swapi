@@ -55,12 +55,7 @@ def raw_ingestion(api_url, destination_table):
     Example: api_url -> https://swapi.dev/api/people/?format=json
              destination_table -> swapi.people_raw
     '''
-    mydb = mysql.connector.connect(
-        host="localhost",
-        user="dev",
-        password="P4ssw0rd",
-        database="swapi"
-    )
+    mydb = swapi.db_connec()
     mycursor = mydb.cursor()
 
     start_dt = dt.datetime.now()
