@@ -35,10 +35,9 @@ create view swapi.oldes_charc_by_film as
 select name, films, birth_year
 from (
   select name, films, birth_year,
-  DENSE_RANK() OVER(PARTITION BY films ORDER BY birth_year ASC) AS BirthYearRank
-  # dense_rank() over ( partition by films, birth_year order by birth_year asc ) as "row"
+  DENSE_RANK() OVER(PARTITION BY films ORDER BY birth_year ASC, ingested_datetime DESC) AS BirthYearRank
   from swapi.people_report
-  where birth_year > 0 and films <> '' # and films = 'https://swapi.dev/api/films/2/'
+  where birth_year > 0 and films <> ''
   order by films
 ) a
 where BirthYearRank = 1
