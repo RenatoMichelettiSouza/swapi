@@ -3,8 +3,7 @@ Star Wars API Test
 
 Pre-requisites
 -----------------------------------------
-Python 3.9.7
-MySql
+Python 3.9.7 & MySql
 
 
 Package Content
