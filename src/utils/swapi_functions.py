@@ -11,7 +11,7 @@ MySql Database connection string
 mydb = mysql.connector.connect(
     host="localhost",
     user="dev",
-    password="P4ssw0rd!",
+    password="P4ssw0rd",
     database="swapi"
 )
 

@@ -58,9 +58,10 @@ def raw_ingestion(api_url, destination_table):
     mydb = mysql.connector.connect(
         host="localhost",
         user="dev",
-        password="P4ssw0rd!",
+        password="P4ssw0rd",
         database="swapi"
     )
+    mycursor = mydb.cursor()
 
     start_dt = dt.datetime.now()
     print('Ingesting data from API to Raw table -----> ' + destination_table)
@@ -89,7 +90,8 @@ def raw_ingestion(api_url, destination_table):
         print(people_list[n]['name'])
         db_values = str(tuple(people_list[n].values()))
         sql = f"INSERT INTO {destination_table} {column_names} VALUES {db_values};"
-        inserted_rows += swapi.db_write(sql)
+        mycursor.execute(sql)
+        inserted_rows += mycursor.rowcount
     print()
     print(inserted_rows, "rows inserted.")
     print(100*'-')
@@ -110,7 +112,8 @@ def raw_ingestion(api_url, destination_table):
                 print(people_list[n]['name'])
                 db_values = str(tuple(people_list[n].values()))
                 sql = f"INSERT INTO {destination_table} {column_names} VALUES {db_values};"
-                inserted_rows += swapi.db_write(sql)
+                mycursor.execute(sql)
+                inserted_rows += mycursor.rowcount
             print()
             print(inserted_rows, "rows inserted.")
             print(100*'-')

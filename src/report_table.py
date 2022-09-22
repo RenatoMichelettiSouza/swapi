@@ -25,7 +25,7 @@ def insert_report_table(origin_table='swapi.people_raw', destination_table='swap
     mydb = mysql.connector.connect(
         host="localhost",
         user="dev",
-        password="P4ssw0rd!",
+        password="P4ssw0rd",
         database="swapi"
     )
     mycursor = mydb.cursor()
@@ -67,7 +67,8 @@ def insert_report_table(origin_table='swapi.people_raw', destination_table='swap
         for i in film_list:
             db_values = str(tuple(i.values()))
             sql = f"INSERT INTO {destination_table} {column_names} VALUES {db_values};"
-            inserted_rows += swapi.db_write(sql)
+            mycursor.execute(sql)
+            inserted_rows += mycursor.rowcount
     print()
     print(inserted_rows, "rows inserted.")
     print(100*'-')
